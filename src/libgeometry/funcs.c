@@ -3,26 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include <ctype.h>
-
-#define MAX_INPUT_LENGTH 100
-#define MAX_OUTPUT_LENGTH 400
-#define MAX_CIRCLES 10
-
-typedef struct Circle {
-    double x, y, r, perimetr, area;
-} Circle;
-
-enum {
-    ERROR_FILE_OUTPUT = 1,
-    ERROR_FILE_INPUT,
-    ERROR_PARSER_NAME,
-    ERROR_PARSER_LEFT_PARENTHESIS,
-    ERROR_PARSER_RIGHT_PARENTHESIS,
-    ERROR_PARSER_COMMA,
-    ERROR_PARSER_DOUBLE,
-    ERROR_PARSER_UNEXPECTED_TOKEN,
-    ERROR_REALLOC
-};
+#include "funcs.h"
 
 int is_input_files_exist(const char* input_path, const char* output_path)
 
@@ -47,8 +28,6 @@ int is_input_files_exist(const char* input_path, const char* output_path)
     return 0;
 
 }
-
-
 
 void handle_error(int error_id, char* str)
 
@@ -326,80 +305,6 @@ int parse_circle(char* start, Circle* out_values)
     out_values->r = r;
 
 
-
-    return 0;
-
-}
-
-
-
-int main()
-
-{
-
-    const char* output_path = "output";
-
-    const char* input_path = "input.txt";
-
-
-
-    int status = is_input_files_exist(input_path, output_path);
-
-    if (status) {
-
-        handle_error(status, (char*)input_path);
-
-        return status;
-
-    }
-
-
-
-    FILE* input_file = fopen(input_path, "r");
-
-    char input[MAX_INPUT_LENGTH];
-
-    Circle* circles = (Circle*)malloc(sizeof(Circle) * MAX_CIRCLES);
-
-    int i = 0;
-
-    for (; fgets(input, MAX_INPUT_LENGTH, input_file); i++) {
-
-        if (i > 0 && i % MAX_CIRCLES == 0) {
-
-            Circle* tmp = (Circle*)realloc(
-
-                    circles, MAX_CIRCLES * 2 * (i / MAX_CIRCLES));
-
-            if (!tmp)
-
-                return ERROR_REALLOC;
-
-            circles = tmp;
-
-        }
-
-        input[strcspn(input, "\n")] = '\0';
-
-        status = parse_circle(input, &circles[i]);
-
-        if (status) {
-
-            handle_error(status, input);
-
-            return status;
-
-        } else {
-
-            calculate_circle(&circles[i]);
-
-        }
-
-    }
-
-    print_circles(output_path, circles, i);
-
-    fclose(input_file);
 
     return 0;
 
