@@ -3,7 +3,8 @@
 #include <math.h>
 #include <string.h>
 #include <ctype.h>
-#include <funcs.h>
+
+#include <libgeometry/funcs.h>
 
 int main()
 
