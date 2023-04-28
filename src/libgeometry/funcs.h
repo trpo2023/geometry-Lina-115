@@ -1,5 +1,9 @@
 #pragma once
 
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #define MAX_INPUT_LENGTH 100
 #define MAX_OUTPUT_LENGTH 400
 #define MAX_CIRCLES 10
