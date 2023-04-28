@@ -1,42 +1,38 @@
+#include "funcs.h"
+#include <ctype.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
-#include <ctype.h>
-#include "funcs.h"
 
 int is_input_files_exist(const char* input_path, const char* output_path)
 
 {
-
     FILE* output_file = fopen(output_path, "w");
 
     if (!output_file)
 
         return ERROR_FILE_OUTPUT;
-        
-    fclose(output_file);
-    
-    FILE* input_file = fopen(input_path, "r");
-    
-    if (!input_file)
-    
-        return ERROR_FILE_INPUT;
-        
-    fclose(input_file);
-    
-    return 0;
 
+    fclose(output_file);
+
+    FILE* input_file = fopen(input_path, "r");
+
+    if (!input_file)
+
+        return ERROR_FILE_INPUT;
+
+    fclose(input_file);
+
+    return 0;
 }
 
 void handle_error(int error_id, char* str)
 
 {
-
     char* error_msg;
 
     switch (error_id) {
-
     case ERROR_FILE_OUTPUT:
 
         error_msg = "Error: can't create output file";
@@ -90,19 +86,14 @@ void handle_error(int error_id, char* str)
         error_msg = "Error: something wrong";
 
         break;
-
     }
 
     fprintf(stderr, "%s\n%s\n", error_msg, str);
-
 }
-
-
 
 char* lower_all(char* str)
 
 {
-
     if (!str)
 
         return NULL;
@@ -110,25 +101,20 @@ char* lower_all(char* str)
     int i = 0;
 
     while (str[i] != '\0') {
-
         str[i] = tolower(str[i]);
 
         i += 1;
-
     }
 
     return str;
-
 }
 
 void print_circles(const char* output_path, Circle* circles, int count)
 
 {
-
     FILE* file = fopen(output_path, "a");
 
     for (int i = 0; i < count; i++) {
-
         char output[MAX_OUTPUT_LENGTH];
 
         sprintf(output,
@@ -145,42 +131,29 @@ void print_circles(const char* output_path, Circle* circles, int count)
 
                 circles[i].area);
 
-
-
-    
-
         sprintf(output + strlen(output), "\n");
 
         fprintf(file, "%s", output);
 
         printf("%s", output);
-
     }
 
     fclose(file);
-
 }
-
-
 
 int is_circle(char* str)
 
 {
-
     if (strncmp(str, "circle", 6))
 
         return ERROR_PARSER_NAME;
 
     return 0;
-
 }
-
-
 
 int is_double(char* str_start, char** str_end, double* num)
 
 {
-
     *num = strtod(str_start, str_end);
 
     if (str_start == *str_end)
@@ -188,15 +161,11 @@ int is_double(char* str_start, char** str_end, double* num)
         return ERROR_PARSER_DOUBLE;
 
     return 0;
-
 }
-
-
 
 int is_prefix(char* str_start, char* prefix)
 
 {
-
     size_t length = strlen(prefix);
 
     length = !length ? 1 : length;
@@ -206,15 +175,11 @@ int is_prefix(char* str_start, char* prefix)
         return ERROR_PARSER_UNEXPECTED_TOKEN;
 
     return 0;
-
 }
-
-
 
 int is_num_circle(char* str_start, char** str_end, char* ending, double* x)
 
 {
-
     if (is_double(str_start, str_end, x))
 
         return ERROR_PARSER_DOUBLE;
@@ -226,30 +191,19 @@ int is_num_circle(char* str_start, char** str_end, char* ending, double* x)
     *str_end += 1;
 
     return 0;
-
 }
-
-
 
 void calculate_circle(Circle* circle)
 
 {
-
     circle->perimetr = 2 * M_PI * circle->r;
 
     circle->area = M_PI * circle->r * circle->r;
-
 }
-
-
-
-
-
 
 int parse_circle(char* start, Circle* out_values)
 
 {
-
     start = lower_all(start);
 
     char** end = &start;
@@ -258,19 +212,13 @@ int parse_circle(char* start, Circle* out_values)
 
     double x, y, r;
 
-
-
     if (is_circle(start))
 
         return ERROR_PARSER_NAME;
 
-
-
     if (is_prefix(start + 6, "("))
 
         return ERROR_PARSER_UNEXPECTED_TOKEN;
-
-
 
     status = is_num_circle(start + 7, end, " ", &x);
 
@@ -290,13 +238,9 @@ int parse_circle(char* start, Circle* out_values)
 
         return status;
 
-
-
     if (is_prefix(*end, "\0"))
 
         return ERROR_PARSER_UNEXPECTED_TOKEN;
-
-
 
     out_values->x = x;
 
@@ -304,8 +248,5 @@ int parse_circle(char* start, Circle* out_values)
 
     out_values->r = r;
 
-
-
     return 0;
-
 }
