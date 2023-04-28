@@ -29,7 +29,7 @@ char* lower_all(char* str);
 void print_circles(const char* output_path, Circle* circles, int count);
 int is_circle(char* str);
 int is_double(char* str_start, char** str_end, double* num);
-.(char* str_start, char* prefix);
+int is_prefix(char* str_start, char* prefix);
 int is_num_circle(char* str_start, char** str_end, char* ending, double* x);
 void calculate_circle(Circle* circle);
 int parse_circle(char* start, Circle* out_values);
